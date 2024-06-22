@@ -4,8 +4,8 @@ import 'package:contact_notes/app/domain/entity/relationship.dart';
 import 'package:contact_notes/core/exceptions/custom_exception.dart';
 import 'package:sqflite/sqflite.dart';
 
-class RelationshipDatabaseLocal extends AppSqlite<Relationship> {
-  RelationshipDatabaseLocal({super.fileName})
+class RelationshipDatabase extends AppSqlite<Relationship> {
+  RelationshipDatabase({super.fileName})
       : super(tableName: AppSqlite.relationshipTableName);
 
   @override

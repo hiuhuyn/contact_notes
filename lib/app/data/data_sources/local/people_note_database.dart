@@ -154,6 +154,17 @@ class PeopleNoteDatabase extends AppSqlite<PeopleNote> {
   Future<int> insert(PeopleNote value) async {
     isCheckUser();
     if (db != null) {
+      final existingRecord = await db!.query(
+        tableName,
+        where: 'id = ?',
+        whereArgs: [value.id],
+      );
+
+      if (existingRecord.isNotEmpty) {
+        throw CustomException("Record with ID ${value.id} already exists",
+            errorType: ErrorType.database);
+      }
+
       return await db!
           .insert(tableName, PeopleNoteModel.fromEntity(value).toMap());
     } else {

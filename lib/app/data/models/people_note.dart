@@ -67,6 +67,33 @@ class PeopleNoteModel extends PeopleNote {
     };
   }
 
+  Map<String, dynamic> toMapBackup() {
+    if (photos != null) {
+      for (int i = 0; i < photos!.length; i++) {
+        photos![i] = photos![i].split('/').last;
+      }
+    }
+    return {
+      'id': id,
+      'desc': desc,
+      'idLabel': idLabel,
+      'created': created?.toString(),
+      'updated': updated?.toString(),
+      'photos': photos.toString(),
+      'author': author,
+      'name': name,
+      'phoneNumber': phoneNumber,
+      'address': address,
+      'birthday': birthday?.toString(),
+      'country': country,
+      'occupation': occupation,
+      'maritalStatus': maritalStatus,
+      'isMale': isMale == true ? 1 : 0,
+      'latitude': latitude,
+      'longitude': longitude,
+    };
+  }
+
   factory PeopleNoteModel.fromMap(Map<String, dynamic> map) {
     final mapPhotos = map["photos"];
     List<String>? photos;

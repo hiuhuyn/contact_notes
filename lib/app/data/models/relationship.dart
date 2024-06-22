@@ -19,23 +19,8 @@ class RelationshipModel extends Relationship {
     );
   }
 
-  Relationship copyWith({
-    int? id,
-    String? idPerson1,
-    String? idPerson2,
-    String? description,
-  }) {
-    return Relationship(
-      id: id ?? this.id,
-      idPerson1: idPerson1 ?? this.idPerson1,
-      idPerson2: idPerson2 ?? this.idPerson2,
-      description: description ?? this.description,
-    );
-  }
-
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
       'idPerson1': idPerson1,
       'idPerson2': idPerson2,
       'description': description,

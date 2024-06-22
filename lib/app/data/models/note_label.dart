@@ -27,7 +27,6 @@ class NoteLabelModel extends NoteLabel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
       'name': name,
       'color': color,
     };

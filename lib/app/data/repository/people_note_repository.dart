@@ -13,7 +13,7 @@ import 'package:contact_notes/core/state/data_sate.dart';
 class PeopleNoteRepositoryIml implements PeopleNoteRepository {
   FileService fileService;
   PeopleNoteDatabase peopleNoteDatabaseLocal;
-  RelationshipDatabaseLocal relationshipDatabaseLocal;
+  RelationshipDatabase relationshipDatabaseLocal;
   PeopleNoteRepositoryIml(this.fileService, this.peopleNoteDatabaseLocal,
       this.relationshipDatabaseLocal);
   @override
@@ -22,7 +22,7 @@ class PeopleNoteRepositoryIml implements PeopleNoteRepository {
       if (value.photos != null) {
         for (int i = 0; i < value.photos!.length; i++) {
           value.photos![i] =
-              await fileService.copyFileToAppDirectory(value.photos![i]);
+              await fileService.copyFileImageToAppDirectory(value.photos![i]);
         }
       }
     } catch (e) {
@@ -167,7 +167,7 @@ class PeopleNoteRepositoryIml implements PeopleNoteRepository {
           );
           if (index == -1) {
             value.photos![i] =
-                await fileService.copyFileToAppDirectory(value.photos![i]);
+                await fileService.copyFileImageToAppDirectory(value.photos![i]);
           }
         }
       }

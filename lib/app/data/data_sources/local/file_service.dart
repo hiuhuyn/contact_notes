@@ -1,12 +1,12 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:contact_notes/core/exceptions/custom_exception.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
 class FileService {
-  Future<String> copyFileToAppDirectory(String oldPath) async {
+  Future<String> copyFileImageToAppDirectory(String oldPath) async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
 
     final directoryPath = '${appDocDir.path}/images';
@@ -18,11 +18,34 @@ class FileService {
     }
 
     String fileName =
-        "${FirebaseAuth.instance.currentUser?.uid}_${DateTime.now().millisecondsSinceEpoch}_${basename(oldPath)}";
+        "${DateTime.now().millisecondsSinceEpoch}_${basename(oldPath)}";
 
     String newPath = join(directory.path, fileName);
 
     final fileNew = await File(oldPath).copy(newPath);
+
+    return fileNew.path.trim();
+  }
+
+  Future<String> saveFileImageToAppDirectory(
+      String fileName, Uint8List fileData) async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+
+    final directoryPath = '${appDocDir.path}/images';
+
+    final directory = Directory(directoryPath);
+
+    if (!await directory.exists()) {
+      await directory.create();
+    }
+
+    String newPath = join(directory.path, fileName);
+
+    final fileNew = File(newPath);
+    if (!await fileNew.exists()) {
+      fileNew.create();
+      fileNew.writeAsBytes(fileData);
+    }
 
     return fileNew.path.trim();
   }

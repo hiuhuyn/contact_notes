@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:contact_notes/app/data/data_sources/remote/google_driver_service.dart';
+import 'package:contact_notes/app/data/repository/google_drive_repository.dart';
+import 'package:contact_notes/app/domain/repository/google_drive_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -40,10 +45,16 @@ import 'package:contact_notes/app/domain/usecases/relationship/update_relationsh
 import 'package:contact_notes/app/presentaion/blocs/note_label/note_label_cubit.dart';
 import 'package:contact_notes/app/presentaion/blocs/people_note/people_note_cubit.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
+import 'package:path_provider/path_provider.dart';
 
 final sl = GetIt.instance;
 
 Future setupDependencies() async {
+  Directory appDocDir = await getApplicationDocumentsDirectory();
+
+  sl.registerLazySingleton<Directory>(
+    () => appDocDir,
+  );
   //services
   sl.registerLazySingleton<FirebaseService>(
     () => FirebaseService(
@@ -51,6 +62,9 @@ Future setupDependencies() async {
         GoogleSignIn(scopes: [
           drive.DriveApi.driveScope,
         ])),
+  );
+  sl.registerLazySingleton<GoogleDriveService>(
+    () => GoogleDriveService(sl()),
   );
   sl.registerLazySingleton<FileService>(
     () => FileService(),
@@ -68,11 +82,10 @@ Future setupDependencies() async {
   sl.registerLazySingleton<PeopleNoteDatabase>(() => peopleNoteDatabase);
 
   final relationshipDatabaseLocal =
-      RelationshipDatabaseLocal(fileName: fileDataName);
+      RelationshipDatabase(fileName: fileDataName);
   await relationshipDatabaseLocal.initDatabase();
-  sl.registerLazySingleton<RelationshipDatabaseLocal>(
+  sl.registerLazySingleton<RelationshipDatabase>(
       () => relationshipDatabaseLocal);
-
   // repositories
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryIml(sl()),
@@ -88,6 +101,15 @@ Future setupDependencies() async {
   );
   sl.registerLazySingleton<RelationshipRepository>(
     () => RelationshipRepositoryIml(sl()),
+  );
+  sl.registerLazySingleton<GoogleDriveRepository>(
+    () => GoogleDriveRepositoryIml(
+      sl(),
+      sl(),
+      sl(),
+      sl(),
+      sl(),
+    ),
   );
 
   // Use Case

@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart' as http;
+import '../../../../core/exceptions/custom_exception.dart';
 import 'firebase_service.dart'; // Import FirebaseService
 
 class GoogleDriveService {
@@ -32,27 +33,41 @@ class GoogleDriveService {
     return drive.DriveApi(authClient);
   }
 
-  Future<String?> createFolder(String folderName) async {
+  Future<String?> createFolder(String folderName,
+      {String? idFolderParents, drive.DriveApi? driveApi}) async {
     try {
-      final driveApi = await getDriveApi();
+      driveApi ??= await getDriveApi();
+
+      final existingFolder = await driveApi.files.list(
+        q: "mimeType='application/vnd.google-apps.folder' and name='$folderName' and trashed=false${idFolderParents != null ? " and '$idFolderParents' in parents" : ""}",
+        spaces: 'drive',
+        $fields: 'files(id, name)',
+      );
+
+      if (existingFolder.files != null && existingFolder.files!.isNotEmpty) {
+        log('Folder already exists: ${existingFolder.files!.first.id}');
+        return existingFolder.files!.first.id;
+      }
 
       final drive.File folder = drive.File();
       folder.name = folderName;
       folder.mimeType = 'application/vnd.google-apps.folder';
+      if (idFolderParents != null) folder.parents = [idFolderParents];
 
       final createdFolder = await driveApi.files.create(folder);
       log('Folder created: ${createdFolder.id}');
       return createdFolder.id;
     } catch (e) {
       log('Error creating folder: $e');
-      return null;
+      throw CustomException('Error creating folder: $e');
     }
   }
 
-  Future<void> saveFileToFolder(String folderId, String fileName,
-      Uint8List fileData, String mimeType) async {
+  Future<void> saveFileToFolder(
+      String folderId, String fileName, Uint8List fileData, String mimeType,
+      {drive.DriveApi? driveApi}) async {
     try {
-      final driveApi = await getDriveApi();
+      driveApi ??= await getDriveApi();
 
       final drive.File file = drive.File();
       file.name = fileName;
@@ -68,9 +83,10 @@ class GoogleDriveService {
     }
   }
 
-  Future<List<drive.File>> listFilesInFolder(String folderId) async {
+  Future<List<drive.File>> listFilesInFolder(String folderId,
+      {drive.DriveApi? driveApi}) async {
     try {
-      final driveApi = await getDriveApi();
+      driveApi ??= await getDriveApi();
       final fileList = await driveApi.files.list(
         q: "'$folderId' in parents",
         spaces: 'drive',
@@ -81,6 +97,83 @@ class GoogleDriveService {
     } catch (e) {
       log('Error listing files: $e');
       return [];
+    }
+  }
+
+  Future<drive.File?> getMostRecentlyModifiedFile(String folderId,
+      {drive.DriveApi? driveApi}) async {
+    try {
+      driveApi ??= await getDriveApi();
+
+      // Truy vấn các tệp trong thư mục cha và sắp xếp theo ngày sửa đổi cuối cùng
+      final fileList = await driveApi.files.list(
+        q: "'$folderId' in parents and trashed=false",
+        spaces: 'drive',
+        orderBy: 'modifiedTime desc',
+        $fields: 'files(id, name, modifiedTime)',
+        pageSize: 1, // Chỉ lấy 1 tệp có lần sửa đổi cuối gần nhất
+      );
+
+      if (fileList.files != null && fileList.files!.isNotEmpty) {
+        final mostRecentFile = fileList.files!.first;
+        log('Most recently modified file: ${mostRecentFile.name} (${mostRecentFile.id})');
+        return mostRecentFile;
+      } else {
+        log('No files found in the folder.');
+        return null;
+      }
+    } catch (e) {
+      log('Error getting most recently modified file: $e');
+      throw CustomException('Error getting most recently modified file: $e');
+    }
+  }
+
+  Future<String?> getIdFileByName(String name,
+      {drive.DriveApi? driveApi, String? idFolderParents}) async {
+    try {
+      driveApi ??= await getDriveApi();
+
+      final fileList = await driveApi.files.list(
+        q: "${idFolderParents != null ? "'$idFolderParents' in parents and " : ""} name='$name' and trashed=false",
+        spaces: 'drive',
+        $fields: 'files(id)',
+        pageSize: 1, // Chỉ lấy 1 tệp có lần sửa đổi cuối gần nhất
+      );
+
+      if (fileList.files != null && fileList.files!.isNotEmpty) {
+        final mostRecentFile = fileList.files!.first;
+        log('File found: (${mostRecentFile.id})');
+        return mostRecentFile.id;
+      } else {
+        log('No files found with the name: $name');
+        return null;
+      }
+    } catch (e) {
+      log('Error getting file by name: $e');
+      throw CustomException('Error getting file by name: $e');
+    }
+  }
+
+  Future<Uint8List?> downloadFile(String fileId,
+      {drive.DriveApi? driveApi}) async {
+    try {
+      driveApi ??= await getDriveApi();
+
+      final mediaStream = await driveApi.files.get(
+        fileId,
+        downloadOptions: drive.DownloadOptions.fullMedia,
+      ) as drive.Media;
+
+      final List<int> dataStore = [];
+      await for (final data in mediaStream.stream) {
+        dataStore.addAll(data);
+      }
+
+      log('File downloaded: $fileId');
+      return Uint8List.fromList(dataStore);
+    } catch (e) {
+      log('Error downloading file: $e');
+      throw CustomException('Error downloading file: $e');
     }
   }
 }

@@ -6,7 +6,7 @@ import 'package:contact_notes/core/exceptions/custom_exception.dart';
 import 'package:contact_notes/core/state/data_sate.dart';
 
 class RelationshipRepositoryIml extends RelationshipRepository {
-  RelationshipDatabaseLocal relationshipDatabaseLocal;
+  RelationshipDatabase relationshipDatabaseLocal;
   RelationshipRepositoryIml(this.relationshipDatabaseLocal);
   @override
   Future<DataState<Relationship>> create(Relationship value) async {

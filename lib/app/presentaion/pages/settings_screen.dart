@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:contact_notes/app/domain/repository/google_drive_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:contact_notes/app/domain/usecases/clear_database_local.dart';
@@ -75,7 +78,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _itemSetting(
             title: AppLocalizations.of(context)!.backup,
             icon: Icons.save_alt_rounded,
-            onTap: () {},
+            onTap: () async {
+              await sl<GoogleDriveRepository>().backupToGoogleDrive().then(
+                (value) {
+                  if (value is DataSuccess) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Backup successful"),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                  }
+                },
+              );
+            },
           ),
           _itemSetting(
             title: AppLocalizations.of(context)!.delete_data_local,

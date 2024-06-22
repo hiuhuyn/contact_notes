@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:contact_notes/app/domain/repository/google_drive_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +9,7 @@ import 'package:contact_notes/app/presentaion/blocs/note_label/note_label_state.
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../core/router/app_router.dart';
+import '../../../setup.dart';
 
 enum DrawerTag {
   home,
@@ -100,6 +104,11 @@ class _AppDrawerState extends State<AppDrawer> {
               tag: DrawerTag.import,
               onTap: () {
                 Navigator.pop(context);
+                sl<GoogleDriveRepository>().getDataFromGoogleDrive().then(
+                  (value) {
+                    log(value.toString());
+                  },
+                );
               },
             ),
             _buildItem(
