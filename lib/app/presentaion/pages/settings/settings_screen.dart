@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:contact_notes/app/domain/repository/google_drive_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:contact_notes/app/domain/usecases/clear_database_local.dart';
@@ -26,10 +23,6 @@ class SettingsScreen extends StatefulWidget {
 
 */
 class _SettingsScreenState extends State<SettingsScreen> {
-  final textStyle = const TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.normal,
-  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,21 +69,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
           _itemSetting(
-            title: AppLocalizations.of(context)!.backup,
-            icon: Icons.save_alt_rounded,
+            title:
+                "${AppLocalizations.of(context)!.backup} & ${AppLocalizations.of(context)!.restore}",
+            icon: Icons.settings_backup_restore,
             onTap: () async {
-              await sl<GoogleDriveRepository>().backupToGoogleDrive().then(
-                (value) {
-                  if (value is DataSuccess) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Backup successful"),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                  }
-                },
-              );
+              AppRouter.navigateToSettingsBackupAndRestore(context);
             },
           ),
           _itemSetting(
@@ -131,7 +114,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   if (value is CustomException) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(value.messange),
+                        content: Text(value.message),
                       ),
                     );
                   } else if (value == "success") {
@@ -198,7 +181,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return ListTile(
       title: Text(
         title,
-        style: textStyle,
       ),
       leading: Icon(icon),
       onTap: onTap,

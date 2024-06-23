@@ -65,5 +65,20 @@
     "select_language" : "Chọn ngôn ngữ",
     "change_color" : "Đổi màu",
     "rename" : "Đổi tên",
-    "retry": "Thử lại"
+    "retry": "Thử lại",
+    "restore" : "Khôi phục",
+    "automatic_daily_backups" : "Tự độn sao lưu mỗi ngày",
+    "time" : "Thời gian",
+    "hours_ago" : "Giờ trước",
+    "minutes_ago"  : "Phút trước",
+    "days_before" : "Ngày trước",
+    "latest_backup" : "Bản sao lưu gần nhất",
+    "delete_backup" : "Xoá bản sao lưu",
+    "backup_to_google_drive" : "Sao lưu trong Google drive",
+    "google_account" : "Tài khoản Google",
+    "data" : "Dữ liệu",
+    "details_about_backup_data" : "Chi tiết về dữ liệu sao lưu",
+    "are_you_sure_you_want_to_delete_this_backup" : "Bạn có chắc chắn muốn xóa bản sao lưu này không?",
+    "are_you_sure_you_want_to_back_up" : "Bạn có chắc chắn muốn sao lưu không?",
+    "no_backup_yet" : "Chưa có bản sao lưu nào"
 }

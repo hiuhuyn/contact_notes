@@ -65,5 +65,21 @@
     "select_language" : "Select the language",
     "change_color" : "Change the color",
     "rename" : "Rename",
-    "retry": "Retry"
+    "retry": "Retry",
+    "restore" : "Restore",
+    "automatic_daily_backups" : "Automatic daily backups",
+    "time" : "Time",
+    "hours_ago" : "Hours ago",
+    "minutes_ago"  : "Minutes ago",
+    "days_before" : "Days before",
+    "latest_backup" : "Latest backup",
+    "delete_backup" : "Delete backup",
+    "backup_to_google_drive" : "Backup to google drive",
+    "google_account" : "Google account",
+    "data" : "Data",
+    "details_about_backup_data" : "Details about backup data",
+    "are_you_sure_you_want_to_delete_this_backup" : "Are you sure you want to delete this backup?",
+    "are_you_sure_you_want_to_back_up" : "Are you sure you want to back up?",
+    "no_backup_yet" : "No backup yet"
+    
 }

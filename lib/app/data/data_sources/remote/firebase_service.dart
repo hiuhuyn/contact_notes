@@ -50,8 +50,11 @@ class FirebaseService {
   }
 
   Future<GoogleSignInAuthentication?> getGoogleAuth() async {
-    final GoogleSignInAccount? googleUser =
-        _googleSignIn.currentUser ?? await _googleSignIn.signIn();
+    log("user google: ${_googleSignIn.currentUser?.email}");
+    GoogleSignInAccount? googleUser = _googleSignIn.currentUser;
+    googleUser ??=
+        await _googleSignIn.signInSilently() ?? await _googleSignIn.signIn();
+
     if (googleUser != null) {
       return await googleUser.authentication;
     }

@@ -6,9 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
   SettingsCubit({SettingsState? state}) : super(state ?? SettingsState()) {
-    _init();
+    init();
   }
-  void _init() async {
+  void init() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     Language language = getLanguages.firstWhere(
       (element) => element.key == prefs.getString("language"),

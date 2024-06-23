@@ -7,11 +7,14 @@ enum ErrorType {
 }
 
 class CustomException implements Exception {
-  final String messange;
+  final String message;
+  final String? title;
+
   final ErrorType errorType;
-  CustomException(this.messange, {this.errorType = ErrorType.unknown});
+  CustomException(this.message,
+      {this.errorType = ErrorType.unknown, this.title});
   @override
   String toString() {
-    return "Error: ${errorType.name} - $messange";
+    return "Error: ${errorType.name} - title: $title, messange: $message";
   }
 }

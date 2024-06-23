@@ -12,4 +12,5 @@ class RouterName {
   static const String createPeople = "/create-people";
   static const String addableRelationshipsList = "/addable-relationships-list";
   static const String photos = "/photos";
+  static const String settingsBackupRestore = "/settings/backup-restore";
 }

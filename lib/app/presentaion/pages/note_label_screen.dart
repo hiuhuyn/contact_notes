@@ -59,7 +59,7 @@ class _NoteLabelScreenState extends State<NoteLabelScreen> {
                   }
                   if (state is NoteLabelErrorState) {
                     return Text(
-                      state.error!.messange,
+                      state.error!.message,
                       style: const TextStyle(color: Colors.red),
                     );
                   }

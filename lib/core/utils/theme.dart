@@ -9,9 +9,10 @@ ThemeData lightThemeData(BuildContext context) {
     dialogBackgroundColor: kContentColorDarkTheme,
     appBarTheme: appBarTheme.copyWith(
       surfaceTintColor: kContentColorDarkTheme,
+      titleTextStyle: Theme.of(context).textTheme.bodyLarge,
     ),
     shadowColor: Colors.grey.shade500,
-    iconTheme: IconThemeData(color: kContentColorLightTheme),
+    iconTheme: IconThemeData(color: kContentColorLightTheme.withOpacity(0.5)),
     textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme)
         .apply(bodyColor: kContentColorLightTheme),
     colorScheme: const ColorScheme.light(
@@ -19,6 +20,9 @@ ThemeData lightThemeData(BuildContext context) {
       secondary: kSecondaryColor,
       error: kErrorColor,
     ),
+    listTileTheme: ListTileThemeData(
+        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+        iconColor: kContentColorLightTheme.withOpacity(0.7)),
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
       border: OutlineInputBorder(
@@ -39,7 +43,19 @@ ThemeData lightThemeData(BuildContext context) {
       elevation: 0,
       surfaceTintColor: kContentColorDarkTheme,
     ),
-    buttonTheme: const ButtonThemeData(),
+    buttonTheme: const ButtonThemeData(
+      buttonColor: Colors.blue,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ButtonStyle(
+      backgroundColor: WidgetStateProperty.all<Color>(Colors.blue.shade100),
+      elevation: WidgetStateProperty.all<double>(0),
+      textStyle: WidgetStateProperty.all<TextStyle>(Theme.of(context)
+          .textTheme
+          .bodyMedium!
+          .copyWith(color: Colors.blue.shade700, fontWeight: FontWeight.bold)),
+    )),
+    cardColor: Colors.grey.shade400,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
       selectedItemColor: kContentColorLightTheme.withOpacity(0.7),

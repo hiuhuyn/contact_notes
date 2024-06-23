@@ -53,7 +53,7 @@ class PeopleNoteCubit extends Cubit<PeopleNoteState> {
           subPeoples: List.from(oldState.subPeoples ?? []),
         ));
       } else {
-        throw CustomException(result.error!.messange,
+        throw CustomException(result.error!.message,
             errorType: result.error!.errorType);
       }
     } catch (e) {
@@ -99,7 +99,7 @@ class PeopleNoteCubit extends Cubit<PeopleNoteState> {
             subPeoples:
                 List.from(oldState.subPeoples ?? oldState.allPeoples!)));
       } else {
-        throw CustomException(result.error!.messange,
+        throw CustomException(result.error!.message,
             errorType: result.error!.errorType);
       }
     } catch (e) {
@@ -132,7 +132,7 @@ class PeopleNoteCubit extends Cubit<PeopleNoteState> {
           subPeoples: List.from(oldState.allPeoples!),
         ));
       } else {
-        throw CustomException(result.error!.messange,
+        throw CustomException(result.error!.message,
             errorType: result.error!.errorType);
       }
     } catch (e) {
@@ -156,7 +156,7 @@ class PeopleNoteCubit extends Cubit<PeopleNoteState> {
         emit(PeopleNoteLoadedState(
             allPeoples: allPeoples, subPeoples: result.data!));
       } else {
-        throw CustomException(result.error!.messange,
+        throw CustomException(result.error!.message,
             errorType: result.error!.errorType);
       }
     } catch (e) {
@@ -176,7 +176,7 @@ class PeopleNoteCubit extends Cubit<PeopleNoteState> {
         emit(PeopleNoteLoadedState(
             allPeoples: allPeoples, subPeoples: result.data!));
       } else {
-        throw CustomException(result.error!.messange,
+        throw CustomException(result.error!.message,
             errorType: result.error!.errorType);
       }
     } catch (e) {
@@ -193,7 +193,7 @@ class PeopleNoteCubit extends Cubit<PeopleNoteState> {
         emit(PeopleNoteLoadedState(
             allPeoples: allPeoples, subPeoples: result.data!));
       } else {
-        throw CustomException(result.error!.messange,
+        throw CustomException(result.error!.message,
             errorType: result.error!.errorType);
       }
     } catch (e) {
@@ -210,7 +210,7 @@ class PeopleNoteCubit extends Cubit<PeopleNoteState> {
             allPeoples: List.from(result.data!),
             subPeoples: List.from(result.data!)));
       } else {
-        throw CustomException(result.error!.messange,
+        throw CustomException(result.error!.message,
             errorType: result.error!.errorType);
       }
     } catch (e) {

@@ -263,7 +263,7 @@ class _InformationPeopleScreenState extends State<InformationPeopleScreen> {
                 } else {
                   final snackBar = SnackBar(
                     content: Text(
-                      "${result.error?.messange}",
+                      "${result.error?.message}",
                     ),
                   );
                   // ignore: use_build_context_synchronously
@@ -290,7 +290,7 @@ class _InformationPeopleScreenState extends State<InformationPeopleScreen> {
                   } else {
                     final snackBar = SnackBar(
                       content: Text(
-                        "${result.error?.messange}",
+                        "${result.error?.message}",
                         style: const TextStyle(color: Colors.red),
                       ),
                     );

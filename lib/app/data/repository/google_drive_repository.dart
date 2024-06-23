@@ -21,19 +21,11 @@ import '../../domain/repository/google_drive_repository.dart';
 import '../data_sources/remote/google_driver_service.dart';
 
 class GoogleDriveRepositoryIml extends GoogleDriveRepository {
-  FileService _fileService;
-  GoogleDriveService _googleDriveService;
-  NoteLabelDatabase _noteLabelDatabase;
-  PeopleNoteDatabase _peopleNoteDatabase;
-  RelationshipDatabase _relationshipDatabase;
-
-  final _databaseAppJson = "database_app.json";
-  final _peopleNoteAppFolder = "people_note_app";
-  final _folderImageName = "images";
-
-  final _keyNoteLabel = "note_label";
-  final _keyPeopleNote = "people_note";
-  final _keyRelationship = "relationship";
+  final FileService _fileService;
+  final GoogleDriveService _googleDriveService;
+  final NoteLabelDatabase _noteLabelDatabase;
+  final PeopleNoteDatabase _peopleNoteDatabase;
+  final RelationshipDatabase _relationshipDatabase;
 
   GoogleDriveRepositoryIml(
       this._fileService,
@@ -53,17 +45,17 @@ class GoogleDriveRepositoryIml extends GoogleDriveRepository {
         utf8.encode(
           jsonEncode(
             {
-              _keyNoteLabel: noteLableAll
+              keyNoteLabel: noteLableAll
                   .map(
                     (e) => NoteLabelModel.fromEntity(e).toMap(),
                   )
                   .toList(),
-              _keyPeopleNote: peopleNoteAll
+              keyPeopleNote: peopleNoteAll
                   .map(
                     (e) => PeopleNoteModel.fromEntity(e).toMapBackup(),
                   )
                   .toList(),
-              _keyRelationship: relationshipAll
+              keyRelationship: relationshipAll
                   .map(
                     (e) => RelationshipModel.fromEntity(e).toMap(),
                   )
@@ -74,7 +66,7 @@ class GoogleDriveRepositoryIml extends GoogleDriveRepository {
       );
       final driveApi = await _googleDriveService.getDriveApi();
       String? idFolderApp = await _googleDriveService
-          .createFolder(_peopleNoteAppFolder, driveApi: driveApi);
+          .createFolder(peopleNoteAppFolder, driveApi: driveApi);
       if (idFolderApp == null) throw Exception("id folder app is null");
 
       String? idFolderAppDateNow = await _googleDriveService.createFolder(
@@ -86,11 +78,11 @@ class GoogleDriveRepositoryIml extends GoogleDriveRepository {
       }
 
       await _googleDriveService.saveFileToFolder(idFolderAppDateNow,
-          _databaseAppJson, jsonData, MimeTypes.applicationJson,
+          databaseAppJson, jsonData, MimeTypes.applicationJson,
           driveApi: driveApi);
 
       String? idFolderSaveImage = await _googleDriveService.createFolder(
-          _folderImageName,
+          folderImageName,
           idFolderParents: idFolderAppDateNow,
           driveApi: driveApi);
       if (idFolderSaveImage == null) {
@@ -120,16 +112,31 @@ class GoogleDriveRepositoryIml extends GoogleDriveRepository {
 
   @override
   Future<DataState> cleanFolderGoogleDrive() async {
-    return const DataSuccess(());
-  }
-
-  @override
-  Future<DataState> getDataFromGoogleDrive() async {
     try {
       final driveApi = await _googleDriveService.getDriveApi();
 
       String? idFolderApp = await _googleDriveService
-          .getIdFileByName(_peopleNoteAppFolder, driveApi: driveApi);
+          .getIdFileByName(peopleNoteAppFolder, driveApi: driveApi);
+      if (idFolderApp == null) {
+        return DataFailed(CustomException("You don't have a data backup!",
+            errorType: ErrorType.continuable));
+      }
+      await _googleDriveService.deleteAllFilesInFolder(idFolderApp,
+          driveApi: driveApi);
+    } catch (e) {
+      return DataFailed(
+          CustomException(e.toString(), errorType: ErrorType.unknown));
+    }
+    return const DataSuccess(());
+  }
+
+  @override
+  Future<DataState> restoreFromGoogleDrive() async {
+    try {
+      final driveApi = await _googleDriveService.getDriveApi();
+
+      String? idFolderApp = await _googleDriveService
+          .getIdFileByName(peopleNoteAppFolder, driveApi: driveApi);
       if (idFolderApp == null) {
         return DataFailed(CustomException("You don't have a data backup!",
             errorType: ErrorType.continuable));
@@ -142,7 +149,7 @@ class GoogleDriveRepositoryIml extends GoogleDriveRepository {
       }
       log("get id file data json");
       final idFileDataJson = await _googleDriveService.getIdFileByName(
-          _databaseAppJson,
+          databaseAppJson,
           driveApi: driveApi,
           idFolderParents: fileBackupNearest.id);
       log("get id file data json: $idFileDataJson");
@@ -158,9 +165,9 @@ class GoogleDriveRepositoryIml extends GoogleDriveRepository {
             errorType: ErrorType.continuable));
       }
       final jsonData = jsonDecode(utf8.decode(fileDataJson));
-      final noteLableJson = jsonData[_keyNoteLabel];
-      final peopleNoteJson = jsonData[_keyPeopleNote];
-      final relationshipJson = jsonData[_keyRelationship];
+      final noteLableJson = jsonData[keyNoteLabel];
+      final peopleNoteJson = jsonData[keyPeopleNote];
+      final relationshipJson = jsonData[keyRelationship];
 
       if (noteLableJson != null) {
         for (var e in noteLableJson) {
@@ -194,7 +201,7 @@ class GoogleDriveRepositoryIml extends GoogleDriveRepository {
       }
 
       final idFolderImage = await _googleDriveService.getIdFileByName(
-          _folderImageName,
+          folderImageName,
           driveApi: driveApi,
           idFolderParents: fileBackupNearest.id);
 
@@ -215,5 +222,28 @@ class GoogleDriveRepositoryIml extends GoogleDriveRepository {
           CustomException(e.toString(), errorType: ErrorType.unknown));
     }
     return const DataSuccess(());
+  }
+
+  @override
+  Future<DataState<drive.File>> getMostRecentlyModifiedFile() async {
+    try {
+      final driveApi = await _googleDriveService.getDriveApi();
+      String? idFolderApp = await _googleDriveService
+          .getIdFileByName(peopleNoteAppFolder, driveApi: driveApi);
+      if (idFolderApp == null) {
+        return DataFailed(CustomException("You don't have a data backup!",
+            errorType: ErrorType.continuable));
+      }
+      final fileMost = await _googleDriveService
+          .getMostRecentlyModifiedFile(idFolderApp, driveApi: driveApi);
+      if (fileMost == null) {
+        return DataFailed(CustomException("You don't have a data backup!",
+            errorType: ErrorType.continuable));
+      }
+      return DataSuccess(fileMost);
+    } catch (e) {
+      return DataFailed(
+          CustomException(e.toString(), errorType: ErrorType.unknown));
+    }
   }
 }

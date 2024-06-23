@@ -10,9 +10,10 @@ import 'package:contact_notes/app/presentaion/pages/note_label_screen.dart';
 import 'package:contact_notes/app/presentaion/pages/people_note/information/informaion_people_screen.dart';
 import 'package:contact_notes/app/presentaion/pages/people_note_from_note_label_screen.dart';
 import 'package:contact_notes/app/presentaion/pages/photos_screen.dart';
-import 'package:contact_notes/app/presentaion/pages/settings_screen.dart';
+import 'package:contact_notes/app/presentaion/pages/settings/settings_screen.dart';
 import 'package:contact_notes/app/presentaion/widgets/app_drawer.dart';
 import '../../app/presentaion/pages/home_screen.dart';
+import '../../app/presentaion/pages/settings/settings_backup_restore_screen.dart';
 import '../../setup.dart';
 import 'router_name.dart';
 export 'router_name.dart';
@@ -126,6 +127,13 @@ class AppRouter {
             );
           },
         );
+      case RouterName.settingsBackupRestore:
+        return PageRouteBuilder(
+          settings: newSettings,
+          pageBuilder: (context, animation, secondaryAnimation) {
+            return const SettingsBackupRestoreScreen();
+          },
+        );
       default:
         return PageRouteBuilder(
           settings: newSettings,
@@ -168,6 +176,14 @@ class AppRouter {
     return await Navigator.pushNamed(
       context,
       RouterName.settings,
+    );
+  }
+
+  static Future navigateToSettingsBackupAndRestore(BuildContext context) async {
+    FocusScope.of(context).unfocus();
+    return await Navigator.pushNamed(
+      context,
+      RouterName.settingsBackupRestore,
     );
   }
 

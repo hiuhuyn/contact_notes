@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:contact_notes/app/domain/repository/google_drive_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,12 +6,10 @@ import 'package:contact_notes/app/presentaion/blocs/note_label/note_label_state.
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../core/router/app_router.dart';
-import '../../../setup.dart';
 
 enum DrawerTag {
   home,
   noteLabel,
-  import,
   share,
   settings,
   unknown,
@@ -99,19 +94,6 @@ class _AppDrawerState extends State<AppDrawer> {
               },
             ),
             _buildItem(
-              title: AppLocalizations.of(context)!.import,
-              icon: Icons.save_outlined,
-              tag: DrawerTag.import,
-              onTap: () {
-                Navigator.pop(context);
-                sl<GoogleDriveRepository>().getDataFromGoogleDrive().then(
-                  (value) {
-                    log(value.toString());
-                  },
-                );
-              },
-            ),
-            _buildItem(
               title: AppLocalizations.of(context)!.settings,
               icon: Icons.settings_outlined,
               tag: DrawerTag.settings,
@@ -139,7 +121,7 @@ class _AppDrawerState extends State<AppDrawer> {
             }
             if (state is NoteLabelErrorState) {
               return Text(
-                state.error!.messange,
+                state.error!.message,
                 style: const TextStyle(color: Colors.red),
               );
             }

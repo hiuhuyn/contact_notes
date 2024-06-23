@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:contact_notes/app/data/data_sources/remote/google_driver_service.dart';
 import 'package:contact_notes/app/data/repository/google_drive_repository.dart';
 import 'package:contact_notes/app/domain/repository/google_drive_repository.dart';
+import 'package:contact_notes/app/domain/usecases/google_drive/backup_to_google_drive.dart';
+import 'package:contact_notes/app/domain/usecases/google_drive/clean_folder_google_drive.dart';
+import 'package:contact_notes/app/domain/usecases/google_drive/get_most_recently_modified_file_google_drive.dart';
+import 'package:contact_notes/app/domain/usecases/google_drive/restore_from_google_drive.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -178,6 +182,18 @@ Future setupDependencies() async {
       sl(),
       sl(),
     ),
+  );
+  sl.registerLazySingleton<BackupToGoogleDrive>(
+    () => BackupToGoogleDrive(sl()),
+  );
+  sl.registerLazySingleton<RestoreFromGoogleDrive>(
+    () => RestoreFromGoogleDrive(sl()),
+  );
+  sl.registerLazySingleton<CleanFolderGoogleDrive>(
+    () => CleanFolderGoogleDrive(sl()),
+  );
+  sl.registerLazySingleton<GetMostRecentlyModifiedFileGoogleDrive>(
+    () => GetMostRecentlyModifiedFileGoogleDrive(sl()),
   );
 
   // bloc  - cubit

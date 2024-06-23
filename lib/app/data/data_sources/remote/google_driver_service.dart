@@ -5,7 +5,7 @@ import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart' as http;
 import '../../../../core/exceptions/custom_exception.dart';
-import 'firebase_service.dart'; // Import FirebaseService
+import 'firebase_service.dart';
 
 class GoogleDriveService {
   final FirebaseService _firebaseService;
@@ -174,6 +174,32 @@ class GoogleDriveService {
     } catch (e) {
       log('Error downloading file: $e');
       throw CustomException('Error downloading file: $e');
+    }
+  }
+
+  Future<void> deleteAllFilesInFolder(String folderId,
+      {drive.DriveApi? driveApi}) async {
+    try {
+      driveApi ??= await getDriveApi();
+
+      final fileList = await driveApi.files.list(
+        q: "'$folderId' in parents and trashed=false",
+        spaces: 'drive',
+        $fields: 'files(id, name)',
+      );
+
+      if (fileList.files != null && fileList.files!.isNotEmpty) {
+        for (var file in fileList.files!) {
+          await driveApi.files.delete(file.id!);
+          log('File deleted: ${file.name}');
+        }
+        log('All files in the folder have been deleted.');
+      } else {
+        log('No files found in the folder.');
+      }
+    } catch (e) {
+      log('Error deleting files: $e');
+      throw CustomException('Error deleting file: $e');
     }
   }
 }
