@@ -4,7 +4,6 @@ import 'package:contact_notes/app/domain/entity/note_label.dart';
 import 'package:contact_notes/app/presentaion/blocs/note_label/note_label_cubit.dart';
 import 'package:contact_notes/app/presentaion/blocs/people_note/people_note_cubit.dart';
 import 'package:contact_notes/app/presentaion/blocs/people_note/people_note_state.dart';
-import 'package:contact_notes/app/presentaion/widgets/app_drawer.dart';
 import 'package:contact_notes/app/presentaion/widgets/errors/empty_data.dart';
 import 'package:contact_notes/app/presentaion/widgets/people_note/people_note_widget.dart';
 import 'package:contact_notes/core/router/app_router.dart';
@@ -95,10 +94,6 @@ class _PeopleNoteFromNoteLabelScreenState
             },
           ),
         ],
-      ),
-      drawer: AppDrawer(
-        tag: DrawerTag.noteLabel,
-        idNoteLabelSelect: widget.noteLabel.id,
       ),
       body: GestureDetector(
         onTap: () {

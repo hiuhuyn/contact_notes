@@ -16,7 +16,7 @@ class NoteLabelRepositoryIml implements NoteLabelRepository {
   @override
   Future<DataState<NoteLabel>> createNoteLabel(NoteLabel noteLabel) async {
     try {
-      await noteLabelDatabase.insert(noteLabel);
+      noteLabel.id = await noteLabelDatabase.insert(noteLabel);
       return DataSuccess(noteLabel);
     } catch (e) {
       log(e.toString());
@@ -36,9 +36,9 @@ class NoteLabelRepositoryIml implements NoteLabelRepository {
   }
 
   @override
-  Future<DataState> deleteNoteLabel(String id) async {
+  Future<DataState> deleteNoteLabel(int id) async {
     try {
-      await noteLabelDatabase.delete<String>(id);
+      await noteLabelDatabase.delete<int>(id);
       await peopleNoteDatabase.queryByIdLabel(id).then(
         (value) async {
           if (value != null) {
@@ -68,7 +68,7 @@ class NoteLabelRepositoryIml implements NoteLabelRepository {
   }
 
   @override
-  Future<DataState<NoteLabel>> getNoteLabelById(String id) async {
+  Future<DataState<NoteLabel>> getNoteLabelById(int id) async {
     try {
       NoteLabel? res = await noteLabelDatabase.queryById(id);
       if (res != null) {

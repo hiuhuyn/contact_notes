@@ -19,9 +19,9 @@ class NoteLabelModel extends NoteLabel {
 
   factory NoteLabelModel.fromMap(Map<String, dynamic> map) {
     return NoteLabelModel(
-      id: map['id'] != null ? map['id'] as String : null,
-      name: map['name'] != null ? map['name'] as String : null,
-      color: map['color'] != null ? map['color'] as int : null,
+      id: map['id'],
+      name: map['name'],
+      color: map['color'],
     );
   }
 
@@ -39,7 +39,7 @@ class NoteLabelModel extends NoteLabel {
       );
 
   NoteLabelModel copyWith({
-    String? id,
+    int? id,
     String? name,
     int? color,
   }) {

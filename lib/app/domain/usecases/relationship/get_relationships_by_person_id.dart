@@ -4,11 +4,11 @@ import 'package:contact_notes/core/state/data_sate.dart';
 import 'package:contact_notes/core/utils/usecase.dart';
 
 class GetRelationshipsByPersonId
-    extends UsecaseOneVariable<DataState<List<Relationship>>, String> {
+    extends UsecaseOneVariable<DataState<List<Relationship>>, int> {
   final RelationshipRepository _repository;
   GetRelationshipsByPersonId(this._repository);
   @override
-  Future<DataState<List<Relationship>>> call(String value) async {
+  Future<DataState<List<Relationship>>> call(int value) async {
     return _repository.getByIdPerson(value);
   }
 }

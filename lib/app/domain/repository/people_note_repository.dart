@@ -6,10 +6,10 @@ abstract class PeopleNoteRepository {
   Future<DataState<PeopleNote>> createPeopleNote(PeopleNote value);
   Future<DataState<PeopleNote>> updatePeopleNote(PeopleNote value);
   Future<DataState> deletePeopleNote(PeopleNote value);
-  Future<DataState<List<PeopleNote>>> getPeopleNoteByLabel(String idLabel);
-  Future<DataState<PeopleNote>> getPeopleNoteById(String id);
+  Future<DataState<List<PeopleNote>>> getPeopleNoteByLabel(int idLabel);
+  Future<DataState<PeopleNote>> getPeopleNoteById(int id);
   Future<DataState<List<PeopleNote>>> getPeopleNoteByName(String name);
   Future<DataState<List<PeopleNote>>> getPeopleNoteByLabelAndName(
-      String idLabel, String name);
+      int idLabel, String name);
   Future<DataState> deleteAll();
 }

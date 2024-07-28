@@ -1,3 +1,4 @@
+import 'package:contact_notes/app/data/data_sources/remote/firebase_service.dart';
 import 'package:contact_notes/app/domain/repository/google_drive_repository.dart';
 import 'package:contact_notes/app/domain/usecases/google_drive/backup_to_google_drive.dart';
 import 'package:contact_notes/app/domain/usecases/google_drive/clean_folder_google_drive.dart';
@@ -6,6 +7,7 @@ import 'package:contact_notes/core/state/data_sate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../../../core/utils/utils.dart';
 import '../../../../setup.dart';
 
@@ -174,7 +176,7 @@ class SsettingsBackupRestoreState extends State<SettingsBackupRestoreScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        "${FirebaseAuth.instance.currentUser?.email}",
+                        "${sl<FirebaseService>().googleSignIn?.email}",
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],

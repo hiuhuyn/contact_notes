@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:contact_notes/app/domain/usecases/clear_database_local.dart';
-import 'package:contact_notes/app/domain/usecases/google/sign_in_and_out_with_google.dart';
 import 'package:contact_notes/app/presentaion/blocs/note_label/note_label_cubit.dart';
 import 'package:contact_notes/app/presentaion/blocs/people_note/people_note_cubit.dart';
 import 'package:contact_notes/app/presentaion/blocs/settings/settings_cubit.dart';
@@ -26,9 +25,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.settings),
-      ),
       body: Column(
         children: [
           _itemSetting(
@@ -136,37 +132,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: AppLocalizations.of(context)!.about,
             icon: Icons.info_outline_rounded,
             onTap: () {},
-          ),
-          _itemSetting(
-            title: AppLocalizations.of(context)!.sign_out,
-            icon: Icons.exit_to_app,
-            onTap: () async {
-              final response =
-                  await sl<SignInAndOutWithGoogleUseCase>().signOut();
-              if (response is DataSuccess) {
-                // ignore: use_build_context_synchronously
-                AppRouter.navigateToLogin(context);
-              } else {
-                showDialog(
-                  // ignore: use_build_context_synchronously
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text(
-                      AppLocalizations.of(context)!.sign_out_failed,
-                    ),
-                    content: Text(response.error.toString()),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(AppLocalizations.of(context)!.ok),
-                      )
-                    ],
-                  ),
-                );
-              }
-            },
           ),
         ],
       ),

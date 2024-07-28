@@ -51,7 +51,7 @@ class PeopleNoteRepositoryIml implements PeopleNoteRepository {
   @override
   Future<DataState> deletePeopleNote(PeopleNote value) async {
     try {
-      await peopleNoteDatabaseLocal.delete<String>(value.id!);
+      await peopleNoteDatabaseLocal.delete<int>(value.id!);
     } catch (e) {
       log(e.toString());
       return DataFailed(CustomException("Failed to delete data ($e)"));
@@ -103,7 +103,7 @@ class PeopleNoteRepositoryIml implements PeopleNoteRepository {
   }
 
   @override
-  Future<DataState<List<PeopleNote>>> getPeopleNoteByLabel(String id) async {
+  Future<DataState<List<PeopleNote>>> getPeopleNoteByLabel(int id) async {
     try {
       List<PeopleNote>? result =
           await peopleNoteDatabaseLocal.queryByIdLabel(id);
@@ -253,7 +253,7 @@ class PeopleNoteRepositoryIml implements PeopleNoteRepository {
   }
 
   @override
-  Future<DataState<PeopleNote>> getPeopleNoteById(String id) async {
+  Future<DataState<PeopleNote>> getPeopleNoteById(int id) async {
     try {
       final result = await peopleNoteDatabaseLocal.queryById(id);
       if (result != null) {
@@ -314,7 +314,7 @@ class PeopleNoteRepositoryIml implements PeopleNoteRepository {
 
   @override
   Future<DataState<List<PeopleNote>>> getPeopleNoteByLabelAndName(
-      String idLabel, String name) async {
+      int idLabel, String name) async {
     try {
       final result =
           await peopleNoteDatabaseLocal.queryByLabelAndName(idLabel, name);

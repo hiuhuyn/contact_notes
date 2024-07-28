@@ -5,13 +5,11 @@ import 'package:contact_notes/app/domain/entity/note_label.dart';
 import 'package:contact_notes/app/domain/entity/people_note.dart';
 import 'package:contact_notes/app/domain/usecases/google/sign_in_and_out_with_google.dart';
 import 'package:contact_notes/app/presentaion/pages/people_note/addable_relationships_list.dart';
-import 'package:contact_notes/app/presentaion/pages/login_screen.dart';
 import 'package:contact_notes/app/presentaion/pages/note_label_screen.dart';
 import 'package:contact_notes/app/presentaion/pages/people_note/information/informaion_people_screen.dart';
 import 'package:contact_notes/app/presentaion/pages/people_note_from_note_label_screen.dart';
 import 'package:contact_notes/app/presentaion/pages/photos_screen.dart';
 import 'package:contact_notes/app/presentaion/pages/settings/settings_screen.dart';
-import 'package:contact_notes/app/presentaion/widgets/app_drawer.dart';
 import '../../app/presentaion/pages/home_screen.dart';
 import '../../app/presentaion/pages/settings/settings_backup_restore_screen.dart';
 import '../../setup.dart';
@@ -23,13 +21,13 @@ class AppRouter {
     log(settings.name.toString());
     String? routeName = settings.name;
 
-    if (routeName == RouterName.root) {
-      if (sl<SignInAndOutWithGoogleUseCase>().isCheckSignIn()) {
-        routeName = RouterName.home;
-      } else {
-        routeName = RouterName.login;
-      }
-    }
+    // if (routeName == RouterName.root) {
+    //   if (sl<SignInAndOutWithGoogleUseCase>().isCheckSignIn()) {
+    //     routeName = RouterName.home;
+    //   } else {
+    //     routeName = RouterName.login;
+    //   }
+    // }
     RouteSettings newSettings =
         RouteSettings(name: routeName, arguments: settings.arguments);
     switch (routeName) {
@@ -41,22 +39,14 @@ class AppRouter {
             return const HomeScreen();
           },
         );
-      case RouterName.login:
-        return PageRouteBuilder(
-          settings: newSettings,
-          pageBuilder: (BuildContext context, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return const LoginScreen();
-          },
-        );
-      case RouterName.settings:
-        return PageRouteBuilder(
-          settings: newSettings,
-          pageBuilder: (BuildContext context, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
-            return const SettingsScreen();
-          },
-        );
+      // case RouterName.settings:
+      //   return PageRouteBuilder(
+      //     settings: newSettings,
+      //     pageBuilder: (BuildContext context, Animation<double> animation,
+      //         Animation<double> secondaryAnimation) {
+      //       return const SettingsScreen();
+      //     },
+      //   );
       case RouterName.noteTag:
         return PageRouteBuilder(
           settings: newSettings,
@@ -79,7 +69,7 @@ class AppRouter {
           settings: newSettings,
           pageBuilder: (context, animation, secondaryAnimation) {
             final data = newSettings.arguments as Map<String, dynamic>;
-            String? idLabel = data["idLabel"];
+            int? idLabel = data["idLabel"];
             return InformationPeopleScreen.create(
               idLabel: idLabel,
             );
@@ -101,8 +91,8 @@ class AppRouter {
           settings: newSettings,
           pageBuilder: (context, animation, secondaryAnimation) {
             final data = newSettings.arguments as Map<String, dynamic>;
-            List<String> relationships = data["relationships"] ?? [];
-            String? id = data["id"];
+            List<int> relationships = data["relationships"] ?? [];
+            int? id = data["id"];
             return AddableRelationshipsList(
               id: id,
               relationships: relationships,
@@ -139,15 +129,7 @@ class AppRouter {
           settings: newSettings,
           pageBuilder: (BuildContext context, Animation<double> animation,
               Animation<double> secondaryAnimation) {
-            return Scaffold(
-              appBar: AppBar(
-                title: Text(newSettings.name.toString()),
-              ),
-              body: Center(
-                child: Text(newSettings.name.toString()),
-              ),
-              drawer: AppDrawer(tag: DrawerTag.unknown),
-            );
+            return const HomeScreen();
           },
         );
     }
@@ -155,29 +137,28 @@ class AppRouter {
 
   static Future<void> navigateToHome(BuildContext context) async {
     FocusScope.of(context).unfocus();
-    await Navigator.pushNamedAndRemoveUntil(
+    await Navigator.pushNamed(
       context,
       RouterName.home,
-      (route) => false,
     );
   }
 
-  static Future<void> navigateToLogin(BuildContext context) async {
-    FocusScope.of(context).unfocus();
-    await Navigator.pushNamedAndRemoveUntil(
-      context,
-      RouterName.login,
-      (route) => false,
-    );
-  }
+  // static Future<void> navigateToLogin(BuildContext context) async {
+  //   FocusScope.of(context).unfocus();
+  //   await Navigator.pushNamed(
+  //     context,
+  //     RouterName.login,
+  //     (route) => false,
+  //   );
+  // }
 
-  static Future navigateToSettings(BuildContext context) async {
-    FocusScope.of(context).unfocus();
-    return await Navigator.pushNamed(
-      context,
-      RouterName.settings,
-    );
-  }
+  // static Future navigateToSettings(BuildContext context) async {
+  //   FocusScope.of(context).unfocus();
+  //   return await Navigator.pushNamed(
+  //     context,
+  //     RouterName.settings,
+  //   );
+  // }
 
   static Future navigateToSettingsBackupAndRestore(BuildContext context) async {
     FocusScope.of(context).unfocus();
@@ -188,7 +169,7 @@ class AppRouter {
   }
 
   static Future<void> navigateToCreateNewPeopleNote(BuildContext context,
-      {String? idLabel}) async {
+      {int? idLabel}) async {
     FocusScope.of(context).unfocus();
     await Navigator.pushNamed(
       context,
@@ -231,10 +212,10 @@ class AppRouter {
 
   static Future<List<PeopleNote>> navigateToAddableRelationshipsList(
       BuildContext context,
-      {required List<String> relationships,
-      String? id}) async {
+      {required List<int> relationships,
+      int? id}) async {
     FocusScope.of(context).unfocus();
-    final result = await await Navigator.pushNamed(
+    final result = await Navigator.pushNamed(
       context,
       RouterName.addableRelationshipsList,
       arguments: {"relationships": relationships, "id": id},
@@ -248,30 +229,27 @@ class AppRouter {
 
   static Future<void> navigateToAbout(BuildContext context) async {
     FocusScope.of(context).unfocus();
-    await Navigator.pushNamedAndRemoveUntil(
+    await Navigator.pushNamed(
       context,
       RouterName.home,
-      (route) => false,
     );
   }
 
   static Future<void> navigateToHelp(BuildContext context) async {
     FocusScope.of(context).unfocus();
-    await Navigator.pushNamedAndRemoveUntil(
+    await Navigator.pushNamed(
       context,
       RouterName.help,
-      (route) => false,
     );
   }
 
   static Future<void> navigateToNoteTag(BuildContext context,
       {NoteLabel? noteLabel, bool selectNewLabel = false}) async {
     FocusScope.of(context).unfocus();
-    await Navigator.pushNamedAndRemoveUntil(
+    await Navigator.pushNamed(
       context,
       RouterName.noteTag,
       arguments: {'noteLabel': noteLabel, "selectNewLabel": selectNewLabel},
-      (route) => false,
     );
   }
 }

@@ -1,13 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:contact_notes/app/domain/entity/note_label.dart';
 import 'package:contact_notes/app/presentaion/blocs/note_label/note_label_cubit.dart';
 import 'package:contact_notes/app/presentaion/blocs/note_label/note_label_state.dart';
-import 'package:contact_notes/app/presentaion/widgets/app_drawer.dart';
 import 'package:contact_notes/app/presentaion/widgets/errors/empty_data.dart';
 import 'package:contact_notes/core/router/app_router.dart';
-import 'package:contact_notes/core/utils/utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /*
@@ -30,17 +27,12 @@ class _NoteLabelScreenState extends State<NoteLabelScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<NoteLabelCubit>().loaded();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.label),
-      ),
-      drawer: AppDrawer(
-        tag: DrawerTag.noteLabel,
-      ),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -166,10 +158,7 @@ class _NoteLabelScreenState extends State<NoteLabelScreen> {
         errorNewLabel = AppLocalizations.of(context)!.please_enter_a_label;
       });
     } else {
-      final newLabel = NoteLabel(
-          id: generateId(FirebaseAuth.instance.currentUser!.uid.toString(),
-              textEditingController.text),
-          name: textEditingController.text);
+      final newLabel = NoteLabel(name: textEditingController.text);
       context.read<NoteLabelCubit>().createNoteLabel(newLabel);
       setState(() {
         errorNewLabel = null;

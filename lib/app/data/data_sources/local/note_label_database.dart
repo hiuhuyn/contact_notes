@@ -9,7 +9,6 @@ class NoteLabelDatabase extends AppSqlite<NoteLabel> {
 
   @override
   Future<int> update(NoteLabel value) async {
-    isCheckUser();
     if (db != null) {
       return await db!.update(
           tableName, NoteLabelModel.fromEntity(value).toMap(),
@@ -22,7 +21,6 @@ class NoteLabelDatabase extends AppSqlite<NoteLabel> {
 
   @override
   Future<List<NoteLabel>> queryAllRows() async {
-    isCheckUser();
     if (db != null) {
       List<Map<String, Object?>> maps = await db!.query(tableName);
       return maps.map((e) => NoteLabelModel.fromMap(e).toEntity()).toList();
@@ -33,8 +31,7 @@ class NoteLabelDatabase extends AppSqlite<NoteLabel> {
   }
 
   @override
-  Future<NoteLabel?> queryById<String>(String id) async {
-    isCheckUser();
+  Future<NoteLabel?> queryById<int>(int id) async {
     if (db != null) {
       final maps = await db!
           .query(tableName, where: 'id = ?', whereArgs: [id], limit: 1);
@@ -51,8 +48,7 @@ class NoteLabelDatabase extends AppSqlite<NoteLabel> {
   }
 
   @override
-  Future<List<NoteLabel>?> queryByKeyWork(String keywork) async {
-    isCheckUser();
+  Future<List<NoteLabel>?> queryByKeyWork<int>(int keywork) async {
     if (db != null) {
       final List<Map<String, dynamic>> maps = await db!.query(
         tableName,
@@ -77,7 +73,6 @@ class NoteLabelDatabase extends AppSqlite<NoteLabel> {
 
   @override
   Future<int> insert(NoteLabel value) async {
-    isCheckUser();
     if (db != null) {
       return await db!
           .insert(tableName, NoteLabelModel.fromEntity(value).toMap());

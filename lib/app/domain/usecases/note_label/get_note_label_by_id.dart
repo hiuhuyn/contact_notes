@@ -4,11 +4,11 @@ import 'package:contact_notes/core/state/data_sate.dart';
 import 'package:contact_notes/core/utils/usecase.dart';
 
 class GetNoteLabelById
-    extends UsecaseOneVariable<DataState<NoteLabel>, String> {
+    extends UsecaseOneVariable<DataState<NoteLabel>, int> {
   NoteLabelRepository repository;
   GetNoteLabelById(this.repository);
   @override
-  Future<DataState<NoteLabel>> call(String value) async {
+  Future<DataState<NoteLabel>> call(int value) async {
     return await repository.getNoteLabelById(value);
   }
 }

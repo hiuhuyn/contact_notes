@@ -6,7 +6,6 @@ class PeopleNoteModel extends PeopleNote {
   PeopleNoteModel._({
     required super.name,
     super.id,
-    super.author,
     super.created,
     super.updated,
     super.desc,
@@ -27,7 +26,6 @@ class PeopleNoteModel extends PeopleNote {
     return PeopleNoteModel._(
       name: entity.name,
       id: entity.id,
-      author: entity.author,
       created: entity.created,
       updated: entity.updated,
       desc: entity.desc,
@@ -53,7 +51,6 @@ class PeopleNoteModel extends PeopleNote {
       'created': created?.toString(),
       'updated': updated?.toString(),
       'photos': photos.toString(),
-      'author': author,
       'name': name,
       'phoneNumber': phoneNumber,
       'address': address,
@@ -80,7 +77,6 @@ class PeopleNoteModel extends PeopleNote {
       'created': created?.toString(),
       'updated': updated?.toString(),
       'photos': photos.toString(),
-      'author': author,
       'name': name,
       'phoneNumber': phoneNumber,
       'address': address,
@@ -108,13 +104,12 @@ class PeopleNoteModel extends PeopleNote {
     }
 
     return PeopleNoteModel._(
-      id: map['id'] != null ? map['id'] as String : null,
+      id: map['id'],
       desc: map['desc'] != null ? map['desc'] as String : null,
-      idLabel: map['idLabel'] != null ? map['idLabel'] as String : null,
+      idLabel: map['idLabel'],
       created: map['created'] != null ? DateTime.parse(map['created']) : null,
       updated: map['updated'] != null ? DateTime.parse(map['updated']) : null,
       photos: photos,
-      author: map['author'] != null ? map['author'] as String : null,
       name: map['name'] != null ? map['name'] as String : null,
       phoneNumber:
           map['phoneNumber'] != null ? map['phoneNumber'] as String : null,

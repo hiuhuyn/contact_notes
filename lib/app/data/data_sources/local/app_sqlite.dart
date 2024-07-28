@@ -38,19 +38,18 @@ abstract class AppSqlite<T> {
   Future _createTables(Database db) async {
     await db.execute('''
       CREATE TABLE $noteLabelTableName (
-        id TEXT PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         color INTEGER
       )''');
     await db.execute('''
             CREATE TABLE $peopleNoteTableName (
-              id TEXT PRIMARY KEY,
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
               desc TEXT,
-              idLabel TEXT,
+              idLabel INTEGER,
               created TEXT,
               updated TEXT,
               photos TEXT,
-              author TEXT,
               name TEXT,
               phoneNumber TEXT,
               address TEXT,
@@ -66,19 +65,11 @@ abstract class AppSqlite<T> {
     await db.execute('''
           CREATE TABLE $relationshipTableName (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            idPerson1 TEXT,
-            idPerson2 TEXT,
+            idPerson1 INTEGER,
+            idPerson2 INTEGER,
             description TEXT
           )
         ''');
-  }
-
-  bool isCheckUser() {
-    if (FirebaseAuth.instance.currentUser == null) {
-      throw CustomException("You need to log in to use this feature",
-          errorType: ErrorType.authentication);
-    }
-    return true;
   }
 
   Future<int> insert(T value);
@@ -90,7 +81,7 @@ abstract class AppSqlite<T> {
 
   Future<List<T>> queryAllRows();
   Future<T?> queryById<E>(E id);
-  Future<List<T>?> queryByKeyWork(String keywork);
+  Future<List<T>?> queryByKeyWork<E>(E keywork);
 
   Future deleteAllRow() async {
     if (db == null) {

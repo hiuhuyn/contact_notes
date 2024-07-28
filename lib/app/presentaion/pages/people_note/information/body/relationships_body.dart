@@ -151,7 +151,7 @@ class _RelationshipsBodyState extends State<RelationshipsBody> {
               await AppRouter.navigateToAddableRelationshipsList(context,
                       id: widget.people.id,
                       relationships: t
-                          .map<String>(
+                          .map<int>(
                             (e) => e.peopleNote.id!,
                           )
                           .toList())

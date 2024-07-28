@@ -18,7 +18,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // ignore: must_be_immutable
 class InformationPeopleScreen extends StatefulWidget {
   InformationPeopleScreen._({this.idLabel, this.peopleNote});
-  String? idLabel;
+  int? idLabel;
   PeopleNote? peopleNote;
   factory InformationPeopleScreen.update({
     required PeopleNote peopleNote,
@@ -28,7 +28,7 @@ class InformationPeopleScreen extends StatefulWidget {
     );
   }
   factory InformationPeopleScreen.create({
-    String? idLabel,
+    int? idLabel,
   }) {
     return InformationPeopleScreen._(
       idLabel: idLabel,

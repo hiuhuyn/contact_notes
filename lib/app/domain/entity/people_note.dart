@@ -1,8 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:contact_notes/app/domain/entity/note.dart';
-import 'package:contact_notes/core/utils/utils.dart';
 
 // ignore: must_be_immutable
 class PeopleNote extends Note {
@@ -21,7 +19,6 @@ class PeopleNote extends Note {
       relationships; // key: "relationship" : Relationship, "people" : PeopleNote
   PeopleNote({
     super.id,
-    super.author,
     super.created,
     super.updated,
     super.desc,
@@ -39,10 +36,6 @@ class PeopleNote extends Note {
     this.latitude,
     this.longitude,
   }) {
-    if (FirebaseAuth.instance.currentUser != null) {
-      id ??= generateId(FirebaseAuth.instance.currentUser!.uid, name ?? "");
-      author ??= FirebaseAuth.instance.currentUser!.uid;
-    }
     created ??= DateTime.now();
     updated ??= DateTime.now();
     isMale ??= true;
@@ -68,13 +61,12 @@ class PeopleNote extends Note {
   }
 
   PeopleNote copyWith({
-    String? id,
+    int? id,
     String? desc,
-    String? idLabel,
+    int? idLabel,
     DateTime? created,
     DateTime? updated,
     List<String>? photos,
-    String? author,
     String? name,
     String? phoneNumber,
     String? address,
@@ -94,7 +86,6 @@ class PeopleNote extends Note {
       idLabel: idLabel ?? this.idLabel,
       created: created ?? this.created,
       updated: updated ?? this.updated,
-      author: author ?? this.author,
       photos: photos != null
           ? List<String>.from(photos)
           : this.photos != null

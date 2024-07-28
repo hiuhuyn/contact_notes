@@ -3,13 +3,12 @@ import 'package:equatable/equatable.dart';
 
 // ignore: must_be_immutable
 class Note extends Equatable {
-  String? id;
+  int? id;
   String? desc;
-  String? idLabel;
+  int? idLabel;
   DateTime? created;
   DateTime? updated;
   List<String>? photos;
-  String? author;
   Note({
     this.id,
     this.desc,
@@ -17,7 +16,6 @@ class Note extends Equatable {
     this.created,
     this.updated,
     this.photos,
-    this.author,
   });
 
   @override
@@ -29,7 +27,6 @@ class Note extends Equatable {
       created,
       updated,
       photos,
-      author,
     ];
   }
 

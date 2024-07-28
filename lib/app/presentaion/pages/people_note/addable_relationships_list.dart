@@ -13,8 +13,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // ignore: must_be_immutable
 class AddableRelationshipsList extends StatefulWidget {
   AddableRelationshipsList({super.key, required this.relationships, this.id});
-  List<String> relationships;
-  String? id;
+  List<int> relationships;
+  int? id;
 
   @override
   State<AddableRelationshipsList> createState() =>

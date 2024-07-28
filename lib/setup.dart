@@ -76,7 +76,7 @@ Future setupDependencies() async {
   sl.registerLazySingleton<MediaService>(
     () => MediaService(quality: 100),
   );
-  const fileDataName = "people_note09.db";
+  const fileDataName = "people_note002.db";
   final noteLabelDatabase = NoteLabelDatabase(fileName: fileDataName);
   await noteLabelDatabase.initDatabase();
   sl.registerLazySingleton<NoteLabelDatabase>(() => noteLabelDatabase);

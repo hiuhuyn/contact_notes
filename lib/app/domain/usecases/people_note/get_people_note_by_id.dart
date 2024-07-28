@@ -4,12 +4,12 @@ import 'package:contact_notes/core/state/data_sate.dart';
 import 'package:contact_notes/core/utils/usecase.dart';
 
 class GetPeopleNoteById
-    extends UsecaseOneVariable<DataState<PeopleNote>, String> {
+    extends UsecaseOneVariable<DataState<PeopleNote>, int> {
   PeopleNoteRepository repository;
   GetPeopleNoteById(this.repository);
 
   @override
-  Future<DataState<PeopleNote>> call(String value) async {
+  Future<DataState<PeopleNote>> call(int value) async {
     return await repository.getPeopleNoteById(value);
   }
 }

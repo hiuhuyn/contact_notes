@@ -37,8 +37,8 @@ class RelationshipModel extends Relationship {
   factory RelationshipModel.fromMap(Map<String, dynamic> map) {
     return RelationshipModel(
       id: map['id'] != null ? map['id'] as int : null,
-      idPerson1: map['idPerson1'] != null ? map['idPerson1'] as String : null,
-      idPerson2: map['idPerson2'] != null ? map['idPerson2'] as String : null,
+      idPerson1: map['idPerson1'],
+      idPerson2: map['idPerson2'],
       description:
           map['description'] != null ? map['description'] as String : null,
     );

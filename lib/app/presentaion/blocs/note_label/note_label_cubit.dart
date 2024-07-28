@@ -83,7 +83,7 @@ class NoteLabelCubit extends Cubit<NoteLabelState> {
     }
   }
 
-  Future deleteNoteLabel(String id) async {
+  Future deleteNoteLabel(int id) async {
     try {
       NoteLabelState? newState;
       if (state is NoteLabelLoadedState) {

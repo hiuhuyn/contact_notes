@@ -10,7 +10,6 @@ class RelationshipDatabase extends AppSqlite<Relationship> {
 
   @override
   Future<List<Relationship>> queryAllRows() async {
-    isCheckUser();
     if (db != null) {
       List<Map<String, Object?>> maps = await db!.query(tableName);
       return maps.map((e) => RelationshipModel.fromMap(e).toEntity()).toList();
@@ -22,7 +21,6 @@ class RelationshipDatabase extends AppSqlite<Relationship> {
 
   @override
   Future<Relationship?> queryById<int>(int id) async {
-    isCheckUser();
     if (db != null) {
       final maps = await db!.query(
         tableName,
@@ -43,9 +41,8 @@ class RelationshipDatabase extends AppSqlite<Relationship> {
   }
 
   @override
-  Future<List<Relationship>?> queryByKeyWork(String idPerson) async {
+  Future<List<Relationship>?> queryByKeyWork<int>(int idPerson) async {
     if (db != null) {
-      isCheckUser();
       final List<Map<String, dynamic>> maps = await db!.query(
         tableName,
         where: 'idPerson1 = ? or  idPerson2 = ?',
@@ -69,7 +66,6 @@ class RelationshipDatabase extends AppSqlite<Relationship> {
 
   @override
   Future<int> update(Relationship value) async {
-    isCheckUser();
     if (db != null) {
       return await db!.update(
           tableName, RelationshipModel.fromEntity(value).toMap(),
@@ -80,8 +76,7 @@ class RelationshipDatabase extends AppSqlite<Relationship> {
     }
   }
 
-  Future<bool> checkExistence(String idPerson1, String idPerson2) async {
-    isCheckUser();
+  Future<bool> checkExistence(int idPerson1, int idPerson2) async {
     final result = await db?.rawQuery(
       'SELECT COUNT(*) FROM $tableName WHERE (idPerson1 = ? AND idPerson2 = ?) OR (idPerson1 = ? AND idPerson2 = ?)',
       [idPerson1, idPerson2, idPerson2, idPerson1],
@@ -93,7 +88,6 @@ class RelationshipDatabase extends AppSqlite<Relationship> {
 
   @override
   Future<int> insert(Relationship value) async {
-    isCheckUser();
     if (db != null &&
         value.idPerson1 != null &&
         value.idPerson2 != null &&

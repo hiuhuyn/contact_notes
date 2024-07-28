@@ -58,7 +58,7 @@ class RelationshipRepositoryIml extends RelationshipRepository {
   }
 
   @override
-  Future<DataState<List<Relationship>>> getByIdPerson(String idPerson) async {
+  Future<DataState<List<Relationship>>> getByIdPerson(int idPerson) async {
     try {
       final result = await relationshipDatabaseLocal.queryByKeyWork(idPerson);
       if (result != null) {

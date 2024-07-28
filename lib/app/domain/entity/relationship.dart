@@ -5,8 +5,8 @@ import 'package:equatable/equatable.dart';
 class Relationship extends Equatable {
   static const String stringUseMap = "relationship";
   int? id;
-  String? idPerson1;
-  String? idPerson2;
+  int? idPerson1;
+  int? idPerson2;
   String? description;
   Relationship({this.id, this.idPerson1, this.idPerson2, this.description});
 
@@ -19,8 +19,8 @@ class Relationship extends Equatable {
 
   Relationship copyWith({
     int? id,
-    String? idPerson1,
-    String? idPerson2,
+    int? idPerson1,
+    int? idPerson2,
     String? description,
   }) {
     return Relationship(

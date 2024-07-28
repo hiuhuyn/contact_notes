@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:contact_notes/app/data/data_sources/local/app_sqlite.dart';
 import 'package:contact_notes/app/data/models/people_note.dart';
 import 'package:contact_notes/app/domain/entity/people_note.dart';
@@ -12,11 +10,8 @@ class PeopleNoteDatabase extends AppSqlite<PeopleNote> {
 
   @override
   Future<List<PeopleNote>> queryAllRows() async {
-    isCheckUser();
     if (db != null) {
-      List<Map<String, Object?>> maps = await db!.query(tableName,
-          where: "author = ?",
-          whereArgs: [FirebaseAuth.instance.currentUser?.uid]);
+      List<Map<String, Object?>> maps = await db!.query(tableName);
       final list = <PeopleNote>[];
       for (var element in maps) {
         try {
@@ -33,8 +28,7 @@ class PeopleNoteDatabase extends AppSqlite<PeopleNote> {
   }
 
   @override
-  Future<PeopleNote?> queryById<String>(String id) async {
-    isCheckUser();
+  Future<PeopleNote?> queryById<int>(int id) async {
     if (db != null) {
       final maps = await db!
           .query(tableName, where: 'id = ?', whereArgs: [id], limit: 1);
@@ -51,10 +45,9 @@ class PeopleNoteDatabase extends AppSqlite<PeopleNote> {
   }
 
   @override
-  Future<List<PeopleNote>?> queryByKeyWork(String keywork) async {
-    isCheckUser();
+  Future<List<PeopleNote>?> queryByKeyWork<String>(String keywork) async {
     if (db != null) {
-      final List<Map<String, dynamic>> maps = await db!.query(
+      final maps = await db!.query(
         tableName,
         where: 'name like ?',
         whereArgs: ['%$keywork%'],
@@ -71,7 +64,7 @@ class PeopleNoteDatabase extends AppSqlite<PeopleNote> {
         }
         return list;
       } else {
-        return null; // Không tìm thấy
+        return []; // Không tìm thấy
       }
     } else {
       throw CustomException("db is not available",
@@ -79,8 +72,7 @@ class PeopleNoteDatabase extends AppSqlite<PeopleNote> {
     }
   }
 
-  Future<List<PeopleNote>?> queryByIdLabel(String idLabel) async {
-    isCheckUser();
+  Future<List<PeopleNote>?> queryByIdLabel(int idLabel) async {
     if (db != null) {
       final List<Map<String, dynamic>> maps = await db!.query(
         tableName,
@@ -99,7 +91,7 @@ class PeopleNoteDatabase extends AppSqlite<PeopleNote> {
         }
         return list;
       } else {
-        return null;
+        return [];
       }
     } else {
       throw CustomException("db is not available",
@@ -108,9 +100,8 @@ class PeopleNoteDatabase extends AppSqlite<PeopleNote> {
   }
 
   Future<List<PeopleNote>?> queryByLabelAndName(
-      String idLabel, String name) async {
+      int idLabel, String name) async {
     if (db != null) {
-      isCheckUser();
       final List<Map<String, dynamic>> maps = await db!.query(
         tableName,
         where: 'idLabel = ? and name like ?',
@@ -128,7 +119,7 @@ class PeopleNoteDatabase extends AppSqlite<PeopleNote> {
         }
         return list;
       } else {
-        return null;
+        return [];
       }
     } else {
       throw CustomException("db is not available",
@@ -138,7 +129,6 @@ class PeopleNoteDatabase extends AppSqlite<PeopleNote> {
 
   @override
   Future<int> update(PeopleNote value) async {
-    isCheckUser();
     value.updated = DateTime.now();
     if (db != null) {
       return await db!.update(
@@ -152,19 +142,7 @@ class PeopleNoteDatabase extends AppSqlite<PeopleNote> {
 
   @override
   Future<int> insert(PeopleNote value) async {
-    isCheckUser();
     if (db != null) {
-      final existingRecord = await db!.query(
-        tableName,
-        where: 'id = ?',
-        whereArgs: [value.id],
-      );
-
-      if (existingRecord.isNotEmpty) {
-        throw CustomException("Record with ID ${value.id} already exists",
-            errorType: ErrorType.database);
-      }
-
       return await db!
           .insert(tableName, PeopleNoteModel.fromEntity(value).toMap());
     } else {

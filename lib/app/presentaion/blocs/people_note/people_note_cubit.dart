@@ -164,7 +164,7 @@ class PeopleNoteCubit extends Cubit<PeopleNoteState> {
     }
   }
 
-  Future loadPeopleNoteByLabelAndName(String idLabel, String name) async {
+  Future loadPeopleNoteByLabelAndName(int idLabel, String name) async {
     if (name.isEmpty) {
       loadPeopleNoteByLabel(idLabel);
       return;
@@ -184,7 +184,7 @@ class PeopleNoteCubit extends Cubit<PeopleNoteState> {
     }
   }
 
-  Future loadPeopleNoteByLabel(String idLabel) async {
+  Future loadPeopleNoteByLabel(int idLabel) async {
     try {
       List<PeopleNote> allPeoples = List.from(await _reloatAllPeople());
       emit(PeopleNoteLoadingState());

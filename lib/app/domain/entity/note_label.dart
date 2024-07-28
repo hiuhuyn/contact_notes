@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 // ignore: must_be_immutable
 class NoteLabel extends Equatable {
-  String? id;
+  int? id;
   String? name;
   int? color;
 
